@@ -1,39 +1,43 @@
-from langchain.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from openai import OpenAI
+import time
 
-from langchain.embeddings import OpenAIEmbeddings
-from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
-from langchain.vectorstores import Pinecone
+client = OpenAI()
 
-import pinecone
+ASSIST_SUM_ID = "asst_DwZv7cRrD8cnVh5MSnSix7HX"
 
-pinecone.init(api_key="9b1de6ea-8e1a-4e9a-ab8a-63c3bf5f1f37", environment="gcp-starter")
-
-
-# loader = PyPDFLoader('easa regul/Easy_Access_Rules_for_Aircrew__Regulation__EU__No_1178-2011__-_Revision_from_August_2023.pdf')
-# documents = loader.load()
-# print(f"{len(documents)} loaded")
-
-# text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
-# doc_split = text_splitter.split_documents(documents)
-# print(f"{len(doc_split) } documents after split")
-
-embeddings = OpenAIEmbeddings()
-# Pinecone.from_documents(doc_split, embeddings, index_name="easa-regulation")
-# print("Docs added to Pinecone vectorstore vectors")
-
-docsearch = Pinecone.from_existing_index(
-    index_name="easa-regulation", embedding=embeddings
-)
+def submit_message(assistant_id, thread, user_message):
+    client.beta.threads.messages.create(
+        thread_id=thread.id, role="user", content=user_message
+    )
+    return client.beta.threads.runs.create(
+        thread_id=thread.id,
+        assistant_id=assistant_id,
+    )
 
 
-qa_chain = RetrievalQA.from_chain_type(
-    llm = ChatOpenAI(verbose=True, temperature=0, model="gpt-4-1106-preview"),
-    retriever=docsearch.as_retriever(search_kwargs={'k': 2}),
-    return_source_documents=True
-)
+def get_response(thread):
+    return client.beta.threads.messages.list(thread_id=thread.id, order="asc")
 
 
-result = qa_chain({'query': 'Summarize paragraph FCL.040, inluding the AMC and GM part.'})
-print(result)
+def create_thread_and_run(user_input, assist_id):
+    thread = client.beta.threads.create()
+    run = submit_message(assist_id, thread, user_input)
+    return thread, run
+
+
+def wait_on_run(run, thread):
+    while run.status == "queued" or run.status == "in_progress":
+        run = client.beta.threads.runs.retrieve(
+            thread_id=thread.id,
+            run_id=run.id,
+        )
+        time.sleep(0.5)
+    return run
+
+
+def summarize(quote):
+
+    thread, run = create_thread_and_run(quote, ASSIST_SUM_ID)
+    run = wait_on_run(run, thread)
+
+    return get_response(thread).data[-1].content[0].text.value

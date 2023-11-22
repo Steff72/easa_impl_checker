@@ -16,7 +16,7 @@ def ingest_docs() -> None:
         "EDW Manuals/EDW OM B A340 Rev19.pdf",
         "EDW Manuals/EDW OM C Initial Issue.pdf",
         "EDW Manuals/EDW OM D Rev29.pdf",
-        "EDW Manuals/EDW OMM Issue 2 Rev02 - Draft 1.pdf"
+        "EDW Manuals/EDW OMM Issue 2 Rev02 - Draft 1.pdf",
     ]
     documents = []
 
