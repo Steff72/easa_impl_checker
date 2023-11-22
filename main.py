@@ -38,13 +38,11 @@ with st.form("promt_input", clear_on_submit=True):
         with st.spinner("Generating response.."):
             generated_response = run_llm(query=prompt)
 
-            formatted_response = f"{generated_response['answer']}"
+            formatted_response = f"{generated_response}"
 
             st.session_state["user_promt_history"].append(prompt)
             st.session_state["chat_answer_history"].append(formatted_response)
-            st.session_state["chat_history"].append(
-                (prompt, generated_response["answer"])
-            )
+            st.session_state["chat_history"].append((prompt, generated_response))
 
 
 if st.session_state["chat_answer_history"]:
