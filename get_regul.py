@@ -5,6 +5,7 @@ client = OpenAI()
 
 ASSIST_SUM_ID = "asst_DwZv7cRrD8cnVh5MSnSix7HX"
 
+
 def submit_message(assistant_id, thread, user_message):
     client.beta.threads.messages.create(
         thread_id=thread.id, role="user", content=user_message
@@ -36,7 +37,6 @@ def wait_on_run(run, thread):
 
 
 def summarize(quote):
-
     thread, run = create_thread_and_run(quote, ASSIST_SUM_ID)
     run = wait_on_run(run, thread)
 

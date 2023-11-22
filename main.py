@@ -4,17 +4,6 @@ import streamlit as st
 from streamlit_chat import message
 
 
-def create_sources_string(sources: set[str]) -> str:
-    if not sources:
-        return ""
-    sources_list = list(sources)
-    sources_list.sort()
-    sources_string = "Sources:\n"
-    for source in sources_list:
-        sources_string += source
-    return sources_string
-
-
 st.header("EDW EASA Implementation checker")
 
 if "user_promt_history" not in st.session_state:
@@ -34,16 +23,8 @@ with st.form("promt_input", clear_on_submit=True):
             generated_response = run_llm(
                 query=prompt, chat_history=st.session_state["chat_history"]
             )
-            # metadata={'page': 260.0, 'source': 'EDW FCTM A340 01SEP23.pdf'}
-            sources = set(
-                [
-                    f'{doc.metadata["source"][5:-4]} page {int(doc.metadata["page"])}\n'
-                    for doc in generated_response["source_documents"]
-                ]
-            )
-            formatted_response = (
-                f"{generated_response['answer']} \n\n{create_sources_string(sources)}"
-            )
+
+            formatted_response = f"{generated_response['answer']}"
             st.session_state["user_promt_history"].append(prompt)
             st.session_state["chat_answer_history"].append(formatted_response)
             st.session_state["chat_history"].append(
@@ -56,16 +37,8 @@ with st.form("promt_input", clear_on_submit=True):
 
         with st.spinner("Generating response.."):
             generated_response = run_llm(query=prompt)
-            sources = set(
-                [
-                    f'{doc.metadata["source"][5:-4]} page {int(doc.metadata["page"])}\n'
-                    for doc in generated_response["source_documents"]
-                ]
-            )
 
-            formatted_response = (
-                f"{generated_response['answer']} \n\n {create_sources_string(sources)}"
-            )
+            formatted_response = f"{generated_response['answer']}"
 
             st.session_state["user_promt_history"].append(prompt)
             st.session_state["chat_answer_history"].append(formatted_response)

@@ -31,7 +31,6 @@ def run_llm(query: str, chat_history: List[Dict[str, Any]] = []):
 
 
 if __name__ == "__main__":
- 
-    easa_text = "the holder of an instructor certificate may log as PIC all flight time during which he or she acts as an instructor in an aircraft;"    
+    easa_text = "the holder of an instructor certificate may log as PIC all flight time during which he or she acts as an instructor in an aircraft;"
     print("*" * 60)
     print(run_llm(easa_text))
