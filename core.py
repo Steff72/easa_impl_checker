@@ -11,7 +11,9 @@ import pinecone
 pinecone.init(api_key=os.getenv("PINECONE_API_KEY"), environment="gcp-starter")
 
 # chat = ChatOpenAI(verbose=True, temperature=0, model="gpt-3.5-turbo-1106")
-chat = ChatOpenAI(verbose=True, temperature=0, model="gpt-4-1106-preview", model_kwargs={'seed': 111})
+chat = ChatOpenAI(
+    verbose=True, temperature=0, model="gpt-4-1106-preview", model_kwargs={"seed": 111}
+)
 embeddings = OpenAIEmbeddings()
 docsearch = Pinecone.from_existing_index(
     index_name="edw-doc-index", embedding=embeddings

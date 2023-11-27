@@ -24,7 +24,7 @@ with st.form("promt_input", clear_on_submit=True):
                 query=prompt, chat_history=st.session_state["chat_history"]
             )
 
-            formatted_response = f"{generated_response['answer']}"
+            formatted_response = f"{generated_response}"
             st.session_state["user_promt_history"].append(prompt)
             st.session_state["chat_answer_history"].append(formatted_response)
             st.session_state["chat_history"].append(
