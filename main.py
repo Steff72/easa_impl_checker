@@ -1,4 +1,4 @@
-from core import run_llm
+from core_1 import run_llm
 
 import streamlit as st
 from streamlit_chat import message
@@ -27,9 +27,7 @@ with st.form("promt_input", clear_on_submit=True):
             formatted_response = f"{generated_response}"
             st.session_state["user_promt_history"].append(prompt)
             st.session_state["chat_answer_history"].append(formatted_response)
-            st.session_state["chat_history"].append(
-                (prompt, generated_response["answer"])
-            )
+            st.session_state["chat_history"].append((prompt, generated_response))
     if submitted_new and prompt:
         st.session_state["chat_history"] = []
         st.session_state["user_promt_history"] = []
