@@ -3,8 +3,13 @@ from core_1 import run_llm
 import streamlit as st
 from streamlit_chat import message
 
+import streamlit as st
 
-st.header("EDW EASA Implementation checker")
+from PIL import Image
+image = Image.open("banner_checker_1.png")
+st.image(image)
+
+st.header("EDW EASA Regul. Implementation checker")
 
 if "user_promt_history" not in st.session_state:
     st.session_state["user_promt_history"] = []
@@ -14,7 +19,7 @@ if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
 with st.form("promt_input", clear_on_submit=True):
-    prompt = st.text_input("Prompt:", placeholder="Enter EASA regulation text here...")
+    prompt = st.text_area("Prompt:", placeholder="Enter EASA regulation text here...")
     submitted = st.form_submit_button("Follow up")
     submitted_new = st.form_submit_button("New regulation")
 
