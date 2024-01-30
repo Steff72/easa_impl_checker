@@ -5,6 +5,8 @@ client = OpenAI()
 
 ASSIST_SUM_ID = "asst_DwZv7cRrD8cnVh5MSnSix7HX"
 
+# get full regulation given the paragrah
+
 
 def submit_message(assistant_id, thread, user_message):
     client.beta.threads.messages.create(

@@ -7,6 +7,8 @@ import pinecone
 
 pinecone.init(api_key=os.getenv("PINECONE_API_KEY"), environment="gcp-starter")
 
+# embedd documents and load to vectorstore
+
 
 def ingest_docs() -> None:
     sources = [
